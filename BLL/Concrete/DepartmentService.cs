@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
+using BLL.BusinessAspects.Autofac;
+using BLL.Contants;
+using Core.Utilities.Results;
 using DAL.Abstract;
+using DAL.UnitOfWorks;
 using Entities.Concrete;
 using Entities.DTOs.DepartmentDTOs;
 using System;
@@ -11,40 +15,48 @@ using System.Threading.Tasks;
 
 namespace BLL.Concrete
 {
+    [SecuredOperation("admin")]
+
     public class DepartmentService : IDepartmentService
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
-        public DepartmentService(IDepartmentRepository departmentRepository, IMapper mapper)
+        public DepartmentService(IUnitOfWork departmentRepository, IMapper mapper)
         {
-            _departmentRepository = departmentRepository;
+            _unitOfWork = departmentRepository;
             _mapper = mapper;
 
         }
-        public void Add(DepartmentToAddDto departmentToAddDto)
+        public async Task Add(DepartmentToAddDto departmentToAddDto)
         {
+
             Department department = _mapper.Map<Department>(departmentToAddDto);
-            _departmentRepository.Add(department);
+            await _unitOfWork.DepartmentRepository.Add(department);
+            await _unitOfWork.Commit();
+
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            Department department = _departmentRepository.Get(d => d.DepartmentId == id);
+            Department department =await _unitOfWork.DepartmentRepository.Get(d => d.DepartmentId == id);
 
-            _departmentRepository.Delete(department);
+             _unitOfWork.DepartmentRepository.Delete(department);
+            await _unitOfWork.Commit();
         }
 
-        public List<DepartmentToListDto> Get()
+        public async Task<List<DepartmentToListDto>> Get()
         {
-            List<Department> departments = _departmentRepository.GetALL();
+
+            List<Department> departments = await _unitOfWork.DepartmentRepository.GetAll();
             List<DepartmentToListDto> departmentToListDtos = _mapper.Map<List<DepartmentToListDto>>(departments);
             return departmentToListDtos;
         }
 
-        public void Update(DepartmentToUpdateDto departmentToUpdateDto)
+        public async Task Update(DepartmentToUpdateDto departmentToUpdateDto)
         {
             Department department = _mapper.Map<Department>(departmentToUpdateDto);
-            _departmentRepository.Update(department);
+            _unitOfWork.DepartmentRepository.Update(department);
+            await _unitOfWork.Commit();
         }
     }
 }

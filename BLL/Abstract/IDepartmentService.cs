@@ -1,4 +1,5 @@
-﻿using Entities.DTOs.DepartmentDTOs;
+﻿using Core.Utilities.Results;
+using Entities.DTOs.DepartmentDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +10,9 @@ namespace BLL.Abstract
 {
     public interface IDepartmentService
     {
-        void Add(DepartmentToAddDto departmentToAddDto);
-        void Update(DepartmentToUpdateDto departmentToUpdateDto);
-        void Delete(int id);
-        List<DepartmentToListDto> Get();
+        Task Add(DepartmentToAddDto departmentToAddDto);
+        Task Update(DepartmentToUpdateDto departmentToUpdateDto);
+        Task Delete(int id);
+        Task<List<DepartmentToListDto>> Get();
     }
 }

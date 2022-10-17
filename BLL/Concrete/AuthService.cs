@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using BLL.Abstract;
 using BLL.Contants;
+using Core.CoreEntities.Concrete;
 using Core.Utilities.Results;
 using Core.Utilities.Security.Hashing;
-using Entities.Concrete;
+using Core.Utilities.Security.JWT;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
@@ -17,15 +18,17 @@ namespace BLL.Concrete
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
-        public AuthService(IUserService userService,IMapper mapper)
+        private readonly ITokenHelper _tokenHelper;
+        public AuthService(IUserService userService, IMapper mapper, ITokenHelper tokenHelper)
         {
             _userService = userService;
             _mapper = mapper;
+            _tokenHelper = tokenHelper;
 
         }
-        public IDataResult<User> Login(UserLoginDto userForLoginDto)
+        public async Task<IDataResult<User>> Login(UserLoginDto userForLoginDto)
         {
-            var userToCheck = _userService.GetByMail(userForLoginDto.Email);
+            var userToCheck = await _userService.GetByMail(userForLoginDto.Email);
             if (userToCheck == null)
             {
                 return new ErrorDataResult<User>(Messages.UserNotFound);
@@ -39,7 +42,7 @@ namespace BLL.Concrete
             return new SuccessDataResult<User>(userToCheck, Messages.SuccessfulLogin);
         }
 
-        public IDataResult<User> Register(UserRegisterDto userForRegisterDto, string password)
+        public async Task<User> Register(UserRegisterDto userForRegisterDto, string password)
         {
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(password, out passwordHash, out passwordSalt);
@@ -48,7 +51,13 @@ namespace BLL.Concrete
             userToAddDto.PasswordSalt = passwordSalt;
             _userService.Add(userToAddDto);
             User user = _mapper.Map<User>(userToAddDto);
-            return new SuccessDataResult<User>(user, Messages.UserRegistered);
+            return user;
+        }
+        public async  Task<AccessToken> CreateAccessToken(User user)
+        {
+            var claims = _userService.GetClaims(user);
+            var accessToken = _tokenHelper.CreateToken(user, claims);
+            return accessToken;
         }
     }
 }

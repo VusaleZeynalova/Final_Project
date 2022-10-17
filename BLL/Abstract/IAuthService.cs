@@ -1,5 +1,6 @@
-﻿using Core.Utilities.Results;
-using Entities.Concrete;
+﻿using Core.CoreEntities.Concrete;
+using Core.Utilities.Results;
+using Core.Utilities.Security.JWT;
 using Entities.DTOs;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,8 @@ namespace BLL.Abstract
 {
     public interface IAuthService
     {
-        IDataResult<User> Register(UserRegisterDto userForRegisterDto, string password);
-        IDataResult<User> Login(UserLoginDto userForLoginDto);
+        Task<User> Register(UserRegisterDto userForRegisterDto, string password);
+        Task<IDataResult<User>> Login(UserLoginDto userForLoginDto);
+        Task<AccessToken> CreateAccessToken(User user);
     }
 }

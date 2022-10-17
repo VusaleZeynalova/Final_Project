@@ -34,6 +34,44 @@ namespace DAL.Migrations
                     b.ToTable("Departments");
                 });
 
+            modelBuilder.Entity("Entities.Concrete.Employee", b =>
+                {
+                    b.Property<int>("EmployeeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("EmployeeName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EmployeeSurname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FirstDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastDay")
+                        .HasColumnType("datetime2");
+
+                    b.Property<float>("Salary")
+                        .HasColumnType("real");
+
+                    b.HasKey("EmployeeId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.ToTable("Employees");
+                });
+
             modelBuilder.Entity("Entities.Concrete.OperationClaim", b =>
                 {
                     b.Property<int>("OperationClaimId")
@@ -96,6 +134,17 @@ namespace DAL.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserOperationClaims");
+                });
+
+            modelBuilder.Entity("Entities.Concrete.Employee", b =>
+                {
+                    b.HasOne("Entities.Concrete.Department", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
                 });
 
             modelBuilder.Entity("Entities.Concrete.UserOperationClaim", b =>

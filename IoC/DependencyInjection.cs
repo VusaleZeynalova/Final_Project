@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Mvc;
 using DAL.DataBaseContext;
 using Microsoft.EntityFrameworkCore;
 using BLL.AutoMapperProfiles;
@@ -10,8 +8,9 @@ using BLL.Abstract;
 using BLL.Concrete;
 using DAL.Abstract;
 using DAL.Concrete;
-using Core.GenericRepositories;
-
+using DAL.UnitOfWorks;
+using Core.Utilities.Security.JWT;
+using Microsoft.AspNetCore.Http;
 namespace IoC
 {
     public class DependencyInjection
@@ -24,12 +23,16 @@ namespace IoC
         public void RegisterServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddDbContext<DataContext>(options =>
             {
                 options.UseSqlServer(_configuration.GetConnectionString("AppDb"));
             });
             services.AddAutoMapper(typeof(Mapper));
+            services.AddScoped<ITokenHelper, JwtHelper>();
+           
+            //services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUserRepository, UserRepository>();
@@ -37,6 +40,9 @@ namespace IoC
 
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddScoped<IDepartmentService, DepartmentService>();
+
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeService, EmployeeService>();
 
             services.AddSwaggerGen(c =>
             {

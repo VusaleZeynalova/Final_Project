@@ -1,4 +1,5 @@
 ﻿using BLL.Abstract;
+using BLL.Contants;
 using Entities.DTOs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -22,23 +23,33 @@ namespace MahammadFinalProject.Controllers
         [HttpPost("register")]
         public IActionResult Register(UserRegisterDto userRegisterDto)
         {
-            var registerResult = _authService.Register(userRegisterDto, userRegisterDto.Password);
-            if (registerResult.Success)
+            try
             {
-                return Ok(registerResult.Message);
+                var registerResult = _authService.Register(userRegisterDto, userRegisterDto.Password);
+                var result = _authService.CreateAccessToken(registerResult.Result);
+
+                return Ok(result.Result);
             }
-            return BadRequest(registerResult.Message);
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPost("login")]
         public IActionResult Login(UserLoginDto userLoginDto)
         {
-            var loginResult = _authService.Login(userLoginDto);
-            if (loginResult.Success)
+            try
             {
-                return Ok(loginResult.Message);
+                var loginResult = _authService.Login(userLoginDto);
+                return Ok(Messages.SuccessfulLogin);
+
             }
-            return BadRequest(loginResult.Message);
+            catch (Exception)
+            {
+                return BadRequest(Messages.UserNotFound);
+            }
+
         }
     }
 }
