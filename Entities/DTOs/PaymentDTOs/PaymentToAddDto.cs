@@ -1,21 +1,16 @@
 ﻿using Core.CoreEntities.Abstract;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Entities.Concrete
+namespace Entities.DTOs.PaymentDTOs
 {
-    public class Payment : IEntity
+    public class PaymentToAddDto:IDto
     {
-        public int PaymentId { get; set; }
-        public Employee Employee { get; set; }
-        [ForeignKey("Employee")]
         public int EmployeeId { get; set; }
         public int Salary { get; set; }
         public DateTime SalaryTime { get; set; }
-
     }
 }

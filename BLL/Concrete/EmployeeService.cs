@@ -86,7 +86,15 @@ namespace BLL.Concrete
         }
 
 
-     
+        public async Task<List<EmployeeToListPaymentDto>> GetPaymentList()
+        {
+            List<Employee> employees = await _unitOfWork.EmployeeRepository.GetWithInclude();
+            List<EmployeeToListPaymentDto> employeeToListPaymentDtos = _mapper.Map<List<EmployeeToListPaymentDto>>(employees);          
+            return employeeToListPaymentDtos;
+
+        }
+
+
 
         private IResult CheckLastday(DateTime? lastDay, DateTime firstDay)
         {
@@ -96,5 +104,8 @@ namespace BLL.Concrete
             }
             return new SuccessResult();
         }
+
+    
+
     }
 }

@@ -12,6 +12,7 @@ namespace DAL.UnitOfWorks
         public IDepartmentRepository DepartmentRepository { get; set; }
         public IUserRepository UserRepository { get; set; }
         public IEmployeeRepository EmployeeRepository { get; set; }
+        public IPaymentRepository PaymentRepository { get; set; }
 
         Task Commit();
     }

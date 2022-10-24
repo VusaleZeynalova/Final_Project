@@ -4,6 +4,7 @@ using Entities.Concrete;
 using Entities.DTOs;
 using Entities.DTOs.DepartmentDTOs;
 using Entities.DTOs.EmployeeDTOs;
+using Entities.DTOs.PaymentDTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,10 @@ namespace BLL.AutoMapperProfiles
             CreateMap<EmployeeToUpdateDto, Employee>();
             CreateMap<Employee, EmployeeToListDto>();
             CreateMap<EmployeeToUpdateDtoWithImage, Employee>();
+            CreateMap<Employee, EmployeeToListPaymentDto>();
+
+            CreateMap<PaymentToAddDto, Payment>();
+            CreateMap<Payment, PaymentToListDto>();
         }
     }
 }

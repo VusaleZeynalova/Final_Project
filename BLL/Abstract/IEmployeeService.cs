@@ -18,6 +18,7 @@ namespace BLL.Abstract
         Task UpdateWithImage(EmployeeToUpdateDtoWithImage employeeToUpdateDto,string imagePath);
         Task Update(EmployeeToUpdateDto employeeToUpdateDto,string imagePath);
         Task UpdateOnlyChanged(int empId,JsonPatchDocument employeeToUpdateDto);
+        Task<List<EmployeeToListPaymentDto>> GetPaymentList();
         
 
     }

@@ -14,17 +14,20 @@ namespace DAL.UnitOfWorks
         public IDepartmentRepository DepartmentRepository { get; set; }
         public IUserRepository UserRepository { get; set; }
         public IEmployeeRepository EmployeeRepository { get; set; }
+        public IPaymentRepository PaymentRepository { get; set; }
         public UnitOfWork
             (DataContext dataContext,
             IDepartmentRepository departmentRepository,
             IUserRepository userRepository,
-            IEmployeeRepository employeeRepository
+            IEmployeeRepository employeeRepository,
+            IPaymentRepository paymentRepository
             )
         {
             _dataContext = dataContext;
             DepartmentRepository = departmentRepository;
             EmployeeRepository = employeeRepository;
             UserRepository = userRepository;
+            PaymentRepository = paymentRepository;
         }
 
         public async Task Commit()

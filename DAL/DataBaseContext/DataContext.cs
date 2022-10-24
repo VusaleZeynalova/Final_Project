@@ -25,11 +25,12 @@ namespace DAL.DataBaseContext
             optionsBuilder.UseSqlServer(@"Server=localhost;Database=MahammadDb;Trusted_Connection=true");
 
         }
-
+       
         public DbSet<User> Users { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<OperationClaim> OperationClaims { get; set; }
         public DbSet<UserOperationClaim> UserOperationClaims { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<Payment> Payments { get; set; }
     }
 }

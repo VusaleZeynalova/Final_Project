@@ -17,7 +17,6 @@ namespace Entities.DTOs.EmployeeDTOs
         public int DepartmentId { get; set; }
         public string EmployeeName { get; set; }
         public string EmployeeSurname { get; set; }
-        public float Salary { get; set; }
         public IFormFile ImagePath { get; set; }
         public DateTime FirstDay { get; set; }
         public DateTime? LastDay { get; set; }
